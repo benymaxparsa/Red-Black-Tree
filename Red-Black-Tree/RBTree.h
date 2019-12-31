@@ -15,7 +15,9 @@ private:
 	Node* root;
 	int size;
 	void insert(int data, Node* node);
-	void reBalance(Node* node);
+	void fixViolation(Node* node);
+	void rightRotate(Node* parent);
+	void leftRotate(Node* parent);
 
 };
 

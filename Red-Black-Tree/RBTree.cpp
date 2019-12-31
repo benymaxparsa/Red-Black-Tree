@@ -38,7 +38,7 @@ void RBTree::insert(int data, Node* node)
 			node->right = new Node(data);
 			node->right->parent = node;
 			size++;
-			reBalance(node->right);
+			fixViolation(node->right);
 		}
 		else
 			insert(data, node->right);
@@ -51,13 +51,70 @@ void RBTree::insert(int data, Node* node)
 			node->left->isLeftChild = true;
 			node->left->parent = node;
 			size++;
-			reBalance(node->left);
+			fixViolation(node->left);
 		}
 		else
 			insert(data, node->left);
 	}
 }
 
-void RBTree::reBalance(Node* node)
+void RBTree::fixViolation(Node* node)
 {
+	Node* dad = NULL;
+	Node* gran = NULL;
+
+	while ((node != root) && (!node->isBlack) && (!node->parent->isBlack))
+	{
+		dad = node->parent;
+		gran = node->parent->parent;
+
+		if (!dad->isLeftChild)
+		{
+			Node* uncle = gran->left;
+
+			if (uncle && !uncle->isBlack)
+			{
+				gran->isBlack = false;
+				uncle->isBlack = true;
+				dad->isBlack = true;
+				node = gran;
+			}
+			else
+			{
+				if (node->isLeftChild)
+				{
+					rightRotate(dad);
+					node = dad;
+					dad = node->parent;
+				}
+				leftRotate(gran);
+				swap(dad->isBlack, gran->isBlack);
+				node = dad;
+			}
+		}
+		else
+		{
+			Node* uncle = gran->right;
+			if (uncle && !uncle->isBlack)
+			{
+				gran->isBlack = false;
+				uncle->isBlack = true;
+				dad->isBlack = true;
+				node = gran;
+			}
+			else
+			{
+				if (!node->isLeftChild)
+				{
+					leftRotate(dad);
+					node = dad;
+					dad = node->parent;
+				}
+				rightRotate(gran);
+				swap(dad->isBlack, gran->isBlack);
+				node = dad;
+			}
+		}
+	}
+	root->isBlack = true;
 }
