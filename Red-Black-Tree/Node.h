@@ -8,9 +8,9 @@ using namespace std;
 class Node
 {
 public:
-	friend class RBTree;
 	Node(int data);
 	~Node();
+	friend class RBTree;
 
 private:
 	int data;

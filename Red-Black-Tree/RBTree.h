@@ -10,6 +10,7 @@ public:
 	~RBTree();
 	int getSize();
 	void insert(int data);
+	void showTree();
 
 private:
 	Node* root;
@@ -18,7 +19,8 @@ private:
 	void fixViolation(Node* node);
 	void rightRotate(Node* node);
 	void leftRotate(Node* node);
-
+	void printBT(Node* node);
+	void printBT(const string& prefix, Node* node, bool isLeft);
 };
 
 #endif // !RBTree_h

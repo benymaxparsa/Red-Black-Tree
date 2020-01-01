@@ -121,9 +121,28 @@ void RBTree::fixViolation(Node* node)
 
 void RBTree::rightRotate(Node* node)
 {
-	if (!node->parent)
-		return;
-	Node* tmp = node;
+	Node* leftN = node->left;
+
+	node->left = leftN->right;
+
+	if (node->left != NULL)
+		node->left->parent = node;
+
+	leftN->parent = node->parent;
+
+	if (node->parent == NULL)
+		root = leftN;
+
+	else if (node == node->parent->left)
+		node->parent->left = leftN;
+
+	else
+		node->parent->right = leftN;
+
+	leftN->right = node;
+	node->parent = leftN;
+
+	/*Node* tmp = node;
 	node->parent->left = tmp->right;
 	if (node->parent->left)
 	{
@@ -151,14 +170,12 @@ void RBTree::rightRotate(Node* node)
 		tmp->right = node->parent;
 		node->parent->isLeftChild = false;
 		node->parent->parent = tmp;
-	}
+	}*/
 }
 
 void RBTree::leftRotate(Node* node)
 {
-	if (!node->parent)
-		return;
-	Node* tmp = node;
+	/*Node* tmp = node;
 	node->parent->right = tmp->left;
 	if (node->parent->right)
 	{
@@ -186,5 +203,48 @@ void RBTree::leftRotate(Node* node)
 		tmp->left = node->parent;
 		node->parent->isLeftChild = true;
 		node->parent->parent = tmp;
+	}*/
+	Node* rightN = node->right;
+
+	node->right = rightN->left;
+
+	if (node->right != NULL)
+		node->right->parent = node;
+
+	rightN->parent = node->parent;
+
+	if (node->parent == NULL)
+		root = rightN;
+
+	else if (node == node->parent->left)
+		node->parent->left = rightN;
+
+	else
+		node->parent->right = rightN;
+
+	rightN->left = node;
+	node->parent = rightN;
+}
+
+void RBTree::showTree()
+{
+	printBT(root);
+}
+
+void RBTree::printBT(Node* node)
+{
+	printBT("", node, false);
+}
+
+void RBTree::printBT(const string& prefix, Node* node, bool isLeft)
+{
+	if (node)
+	{
+		cout << prefix;
+		cout << (isLeft ? "├──" : "└──");
+		cout << node->data << endl;
+
+		printBT(prefix + (isLeft ? "│   " : "    "), node->left, true);
+		printBT(prefix + (isLeft ? "│   " : "    "), node->right, false);
 	}
 }

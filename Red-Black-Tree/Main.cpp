@@ -12,5 +12,7 @@ int main()
     tree->insert(2);
     tree->insert(1);
 
+    tree->showTree();
+
 	return 0;
 }
